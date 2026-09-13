@@ -1,11 +1,47 @@
 package main
 
 import (
-	"encore-be/pkg/network"
-	"encore-be/pkg/startup"
+	"log"
+
+	"github.com/gofiber/fiber/v3"
+	
+	// Sesuaikan "be-encore" dengan nama module di go.mod kamu
+	"encore-be/internal/config"
+	"encore-be/internal/models"
+	"encore-be/internal/modules/user"
 )
 
 func main() {
-	app := network.NewApp()
-	startup.StartServer(app)
+	db, err := config.ConnectDB()
+	if err != nil {
+		log.Fatal("Gagal konek database: ", err)
+	}
+
+	enumQuery := `
+		DO $$ 
+		BEGIN 
+			IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN 
+				CREATE TYPE user_role AS ENUM ('admin', 'staff', 'buyer'); 
+			END IF; 
+		END $$;
+	`
+	db.Exec(enumQuery)
+
+	err = db.AutoMigrate(&models.User{})
+	if err != nil {
+		log.Fatal("Gagal migrasi model User: ", err)
+	}
+	
+	config.SeedUsers(db)
+
+	userService := user.NewService(db)
+	userController := user.NewController(userService)
+
+	app := fiber.New()
+
+	api := app.Group("/api/v1")
+	api.Get("/users", userController.GetAll)
+
+	log.Println("Server Fiber berjalan di port 8080...")
+	log.Fatal(app.Listen(":8080")) 
 }
