@@ -5,7 +5,6 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	
-	// Sesuaikan "be-encore" dengan nama module di go.mod kamu
 	"encore-be/internal/config"
 	"encore-be/internal/models"
 	"encore-be/internal/modules/user"
@@ -27,9 +26,9 @@ func main() {
 	`
 	db.Exec(enumQuery)
 
-	err = db.AutoMigrate(&models.User{})
+	err = db.AutoMigrate(&models.User{}, &models.Venue{}, &models.Artist{})
 	if err != nil {
-		log.Fatal("Gagal migrasi model User: ", err)
+		log.Fatal("Gagal migrasi model: ", err)
 	}
 	
 	config.SeedUsers(db)
