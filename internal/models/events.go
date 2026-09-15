@@ -11,6 +11,7 @@ const (
 	EventDraft     EventStatus = "draft"
 	EventPublished EventStatus = "published"
 	EventEnded     EventStatus = "ended"
+	EventCancelled EventStatus = "cancelled"
 )
 
 type Event struct {
