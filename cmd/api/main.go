@@ -3,11 +3,9 @@ package main
 import (
 	"flag"
 	"log"
-
 	"github.com/gofiber/fiber/v3"
-
 	"encore-be/internal/config"
-	"encore-be/internal/modules/user"
+	"encore-be/internal/routes"
 )
 
 func main() {
@@ -27,13 +25,11 @@ func main() {
 		return
 	}
 
-	userService := user.NewService(db)
-	userController := user.NewController(userService)
-
 	app := fiber.New()
 
 	api := app.Group("/api/v1")
-	api.Get("/users", userController.GetAll)
+	routes.Setup(app, db)
+	
 
 	log.Println("Server Fiber berjalan di port 8080...")
 	log.Fatal(app.Listen(":8080")) 
