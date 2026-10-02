@@ -27,7 +27,6 @@ func main() {
 
 	app := fiber.New()
 
-	api := app.Group("/api/v1")
 	routes.Setup(app, db)
 	
 

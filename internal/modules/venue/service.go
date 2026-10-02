@@ -13,6 +13,14 @@ type Service struct {
 	validator *Validator
 }
 
+func NewService(repository *Repository, validator *Validator) *Service {
+	return &Service{
+		repository: repository,
+		validator:  validator,
+	}
+}
+
+
 func(s *Service) GetAllVenueCategory() ([]models.VenueCategory, error) {
 	return s.repository.findAllVenueCategory()
 }
