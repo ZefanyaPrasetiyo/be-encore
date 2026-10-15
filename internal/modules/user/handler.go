@@ -28,7 +28,7 @@ func (h *Handler) GetAll(c fiber.Ctx) error {
 func (h *Handler) GetByID(c fiber.Ctx) error {
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return fiber.ErrBadRequest
+		return fiber.NewError(fiber.StatusBadRequest, "format UUID tidak valid")
 	}
 
 	user, err := h.service.GetByID(id)
@@ -43,7 +43,7 @@ func (h *Handler) Create(c fiber.Ctx) error {
 	var req CreateUserRequest
 
 	if err := c.Bind().Body(&req); err != nil {
-		return fiber.ErrBadRequest
+		return fiber.NewError(fiber.StatusBadRequest, "request body tidak valid")
 	}
 
 	user, err := h.service.Create(req)

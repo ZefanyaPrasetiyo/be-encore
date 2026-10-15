@@ -18,9 +18,7 @@ func NewHandler(service *Service) *Handler {
 func (h *Handler) GetVenueCategory(c fiber.Ctx) error{
 	category, err := h.service.GetAllVenueCategory()
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to retrieve venue categories",
-		})
+		return err
 	}
 
 	return c.JSON(category)
@@ -29,16 +27,12 @@ func (h *Handler) GetVenueCategory(c fiber.Ctx) error{
 func (h *Handler) GetVenueCategoryById(c fiber.Ctx) error{
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid venue category ID format",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid venue category ID format")
 	}
 
 	category, err := h.service.GetVenueCategoryById(id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Venue category not found",
-		})
+		return err
 	}
 
 	return c.JSON(category)
@@ -48,16 +42,12 @@ func (h *Handler) CreateVenueCategory(c fiber.Ctx) error{
 	var req CreateVenueCategoryRequest
 
 	if err := c.Bind().Body(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request body",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	category, err := h.service.CreateVenueCategory(req)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to create venue category",
-		})
+		return err
 	}
 
 	return c.JSON(category)
@@ -69,29 +59,21 @@ func (h *Handler) UpdateVenueCategory(c fiber.Ctx) error{
 
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid venue category ID format",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid venue category ID format")
 	}
 
 	if err := c.Bind().Body(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request body",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	_, err = h.service.GetVenueCategoryById(id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Venue category not found",
-		})
+		return err
 	}
 
 	category, err := h.service.UpdateVenueCategory(id, req)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to update venue category",
-		})
+		return err
 	}
 
 	return c.JSON(category)
@@ -101,23 +83,17 @@ func (h *Handler) UpdateVenueCategory(c fiber.Ctx) error{
 func (h *Handler) DeleteVenueCategory(c fiber.Ctx) error{
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid venue category ID format",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid venue category ID format")
 	}
 
 	_, err = h.service.GetVenueCategoryById(id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Venue category not found",
-		})
+		return err
 	}
 
 	err = h.service.DeleteVenueCategory(id)
 	if err != nil {
-		return c.Status(fiber.StatusNoContent).JSON(fiber.Map{
-			"error": "Failed to delete venue category",
-		})
+		return err
 	}
 	return c.JSON(fiber.Map{
 		"message": "Venue category deleted successfully",
@@ -127,9 +103,7 @@ func (h *Handler) DeleteVenueCategory(c fiber.Ctx) error{
 func (h *Handler) GetVenue(c fiber.Ctx) error{
 	venue, err := h.service.GetAllVenue()
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to retrieve venues",
-		})
+		return err
 	}
 
 	return c.JSON(venue)
@@ -138,18 +112,14 @@ func (h *Handler) GetVenue(c fiber.Ctx) error{
 func (h *Handler) GetVenueById(c fiber.Ctx) error{
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid venue ID format",
-		})	
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid venue ID format")
 	}
 
 	category, err := h.service.GetVenueById(id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Venue not found",
-		})
+		return err
 	}
-	
+
 	return c.JSON(category)
 }
 
@@ -157,16 +127,12 @@ func (h *Handler) CreateVenue(c fiber.Ctx)error{
 	var req CreateVenueRequest
 
 	if err := c.Bind().Body(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid request")
 	}
 
 	venue, err :=  h.service.CreateVenue(req)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error":"Failed to create venue",
-		})
+		return err
 	}
 
 	return c.JSON(venue)
@@ -177,29 +143,20 @@ func (h *Handler) UpdateVenue(c fiber.Ctx) error{
 
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid venue ID format",
-		})
-
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid venue ID format")
 	}
 	if err :=  c.Bind().Body(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid request body",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	_, err = h.service.GetVenueById(id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Venue not found",
-		})
+		return err
 	}
 
 	venue, err := h.service.updateVenue(id, req)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to update venue",
-		})
+		return err
 	}
 
 	return c.JSON(venue)
@@ -208,28 +165,20 @@ func (h *Handler) UpdateVenue(c fiber.Ctx) error{
 func (h *Handler) DeleteVenue(c fiber.Ctx) error{
 	id, err := uuid.Parse(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": "Invalid venue ID format",
-		})
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid venue ID format")
 	}
 
 	_, err = h.service.GetVenueById(id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"error": "Venue not found",
-		})
+		return err
 	}
 
 	err = h.service.DeleteVenue(id)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error":"failed to delete venue",
-		})
+		return err
 	}
 
 	return c.JSON(fiber.Map{
 		"message": "Venue deleted successfully",
 	})
 }
-
-

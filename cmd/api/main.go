@@ -5,6 +5,7 @@ import (
 	"log"
 	"github.com/gofiber/fiber/v3"
 	"encore-be/internal/config"
+	"encore-be/internal/middleware"
 	"encore-be/internal/routes"
 )
 
@@ -25,7 +26,7 @@ func main() {
 		return
 	}
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{ErrorHandler: middleware.ErrorHandler})
 
 	routes.Setup(app, db)
 	
