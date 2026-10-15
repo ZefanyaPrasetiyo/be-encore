@@ -13,6 +13,7 @@ type TicketCategory struct {
 	Quota 		int 		`gorm:"type:int;not null" json:"quota"`
 	Event 		Event		`gorm:"foreignKey:EventID" json:"-"`
 	Benefits 	[]Benefit `gorm:"many2many:ticket_category_benefits" json:"benefits,omitempty"`
+	Tickets  	[]Ticket  `gorm:"foreignKey:CategoryID;references:ID" json:"tickets,omitempty"`
 	CreatedAt 	time.Time	`gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt	time.Time	`gorm:"autoUpdateTime" json:"updated_at"`
 

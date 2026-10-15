@@ -4,7 +4,7 @@ import (
 	"encore-be/internal/modules/user"
 	"encore-be/internal/modules/venue"
 	"encore-be/internal/modules/artist"
-
+	"encore-be/internal/modules/events"
 	"github.com/gofiber/fiber/v3"
 	"gorm.io/gorm"
 )
@@ -16,4 +16,5 @@ func Setup(app *fiber.App, db *gorm.DB) {
 	venue.RegisterRoutes(api, db)
 	user.RegisterRoutes(api, db)
 	artist.RegisterRoutes(api, db)
+	events.RegisterRoutes(api, db)
 }

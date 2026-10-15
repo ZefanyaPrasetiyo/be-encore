@@ -18,7 +18,7 @@ const (
 type Ticket struct {
 	ID 			uuid.UUID 		`gorm:"type:uuid;default:gen_random_uuid();primaryKey" json:"id"`
 	OrderID		uuid.UUID 		`gorm:"type:uuid;not null" json:"order_id"`
-	CategoryID 	uuid.UUID 		`gorm:"type:uuuid;not null" json:"category_id"`
+	CategoryID 	uuid.UUID 		`gorm:"type:uuid;not null" json:"category_id"`
 	TicketCode	string	  		`gorm:"type:varchar(50);uniqueIndex;not null" json:"ticket_code"`
 	QRCode		*string	  		`gorm:"type:text" json:"qr_code,omitempty"`
 	Status 		TicketStatus	`gorm:"type:ticket_status;default:'pending';not null" json:"status"`

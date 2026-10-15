@@ -29,7 +29,7 @@ func MigrateDB(db *gorm.DB) {
 	`
 	db.Exec(enumQuery)
 
-	err := db.AutoMigrate(&models.User{}, &models.Venue{},&models.VenueCategory{}, &models.Artist{}, &models.Event{}, &models.Order{}, &models.Ticket{}, &models.TicketCategory{}, &models.Benefit{})
+	err := db.AutoMigrate(&models.User{}, &models.Venue{},&models.VenueCategory{}, &models.Artist{}, &models.Event{}, &models.Order{}, &models.Ticket{}, &models.TicketCategory{}, &models.Benefit{}, &models.Event{})
 	if err != nil {
 		log.Fatal("Gagal migrasi model:", err)
 	}

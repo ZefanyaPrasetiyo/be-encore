@@ -23,8 +23,8 @@ type Event struct {
 	StartDate   time.Time   `gorm:"not null" json:"start_date"`
 	Status      EventStatus `gorm:"type:event_status;default:'draft';not null" json:"status"`
 	BannerURL   *string     `gorm:"type:varchar(255)" json:"banner_url,omitempty"`
-	Artist Artist `gorm:"foreignKey:ArtistID" json:"artist"`
-	Venue  Venue  `gorm:"foreignKey:VenueID" json:"venue"`
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"updated_at"`
+	Artist 		Artist 		`gorm:"foreignKey:ArtistID" json:"artist"`
+	Venue  		Venue  		`gorm:"foreignKey:VenueID" json:"venue"`
+	CreatedAt 	time.Time 	`gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt 	time.Time 	`gorm:"autoUpdateTime" json:"updated_at"`
 }
