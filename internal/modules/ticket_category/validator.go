@@ -14,6 +14,10 @@ func NewValidator() *Validator{
 	}
 }
 
+func (v *Validator) Validate(req any) error{
+	return  v.validate.Struct(req)
+}
+
 func (v Validator) validCreateTicketCategory(req CreateTicketCategoryRequest) error{
 	return v.validate.Struct(req)
 }

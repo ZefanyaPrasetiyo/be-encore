@@ -40,3 +40,6 @@ func(r *Repository) updateTicketCategory(ticketCategory *models.TicketCategory) 
 	return r.db.Save(ticketCategory).Error
 }
 
+func(r *Repository) DeleteTicketCategory(ticketCategory *models.TicketCategory) error {
+	return r.db.Delete(ticketCategory).Error
+}
